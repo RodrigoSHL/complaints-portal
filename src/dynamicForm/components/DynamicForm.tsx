@@ -41,7 +41,7 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
                                     <input
                                         type={field.type}
                                         name={field.name}
-                                        defaultValue={field.default || ''}
+                                        defaultValue={field.defaultValue || ''}
                                         onChange={handleChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     />
@@ -66,7 +66,7 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
                                     <label className="block text-sm font-medium text-gray-700">{field.label}</label>
                                     <textarea
                                         name={field.name}
-                                        defaultValue={field.default || ''}
+                                        defaultValue={field.defaultValue || ''}
                                         onChange={handleChange}
                                         rows={4}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"

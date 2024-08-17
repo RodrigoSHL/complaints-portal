@@ -4,5 +4,6 @@ export interface FormFields {
   type: "text" | "email" | "boolean" | "text-area" | "array-text";
   visible: boolean;
   default?: any;
+  defaultValue?: string;
   options?: string[];
 }

@@ -12,25 +12,25 @@ import DynamicForm from "@/dynamicForm/components/DynamicForm";
 export default function FormFieldsPage() {
 
   const dynamicField: FormFields[] = [
-    { name: 'anonymousComplaint', label: 'Anonymous Complaint', type: 'boolean', visible: true, default: true },
+    { name: 'anonymousComplaint', label: 'Anonymous Complaint', type: 'boolean', visible: true, default: true, defaultValue: 'some name' },
     {
-      name: 'complaintType',
+      name: 'complaintExample',
       label: 'Type of complaint',
       type: 'array-text',
       visible: true,
       default: true,
-      options: ['anonimo', 'con nombre', 'otro'], // Las opciones para el campo array-text
+      options: ['anonimo ex', 'con nombre ex', 'otro ex'], // Las opciones para el campo array-text
     },
-    { name: 'companyRelationship', label: 'Company Relationship', type: 'text', visible: false, default: true },
-    { name: 'email', label: 'Email', type: 'email', visible: true, default: true },
-    { name: 'incidentDetail', label: 'Incident details', type: 'text-area', visible: true, default: true },
-    { name: 'witnesses', label: 'Witnesses of the incident', type: 'text', visible: true, default: true },
-    { name: 'involved', label: 'Mentions those involved', type: 'text', visible: true, default: true },
+    { name: 'companyRelationship', label: 'Company Relationship', type: 'text', visible: false, default: true, defaultValue: 'some name' },
+    { name: 'email', label: 'Email', type: 'email', visible: true, default: true, defaultValue: 'some@email.com' },
+    { name: 'incidentDetail', label: 'Incident details', type: 'text-area', visible: true, default: true, defaultValue: 'some text area' },
+    { name: 'witnesses', label: 'Witnesses of the incident', type: 'text', visible: true, default: true, defaultValue: 'some name' },
+    { name: 'involved', label: 'Mentions those involved', type: 'text', visible: true, default: true, defaultValue: 'some name' },
     {
       name: 'complaintType',
       label: 'Type of complaint',
       type: 'array-text',
-      visible: true,
+      visible: false,
       default: true,
       options: ['anonimo', 'con nombre', 'otro'], // Las opciones para el campo array-text
     },

@@ -9,18 +9,6 @@ export const Sidebar = () => {
 
     const menuItems = [
         {
-            path: "/dashboard/main",
-            icon: <IoBrowsersOutline size={40} />,
-            title: "Denuncias",
-            subtitle: "Reports"
-        },
-        {
-            path: "/dashboard/counter",
-            icon: <IoCalculator size={40} />,
-            title: "Informes y Reportes",
-            subtitle: "Local State"
-        },
-        {
             path: "/dashboard/pokemons",
             icon: <GrDomain size={40} />,
             title: "Portal Denuncias",

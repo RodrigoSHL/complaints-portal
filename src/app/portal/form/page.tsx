@@ -26,6 +26,8 @@ export default function FormFieldsPage() {
             default: true,
             options: ['anonimo', 'con nombre', 'otro'], // Las opciones para el campo array-text
         },
+        { name: 'attachments', label: 'Attachments', type: 'file', visible: true, default: true },
+
     ];
 
     const handleSubmit = (formData: { [key: string]: any }) => {

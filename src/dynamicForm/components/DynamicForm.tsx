@@ -11,19 +11,31 @@ interface Props {
 
 const DynamicForm = ({ fields, onSubmit }: Props) => {
     const [formState, setFormState] = useState<{ [key: string]: any }>({});
+    const [files, setFiles] = useState<{ [key: string]: File[] }>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
-        const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-        setFormState((prev) => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value,
-        }));
+
+        if (type === 'file') {
+            const fileList = (e.target as HTMLInputElement).files;
+            if (fileList) {
+                setFiles((prevFiles) => ({
+                    ...prevFiles,
+                    [name]: [...(prevFiles[name] || []), ...Array.from(fileList)],
+                }));
+            }
+        } else {
+            const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
+            setFormState((prev) => ({
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value,
+            }));
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formState);
+        onSubmit({ ...formState, ...files });
     };
 
     return (
@@ -106,6 +118,32 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
                                         </select>
                                     </div>
                                 );
+                            case 'file':
+                                return (
+                                    <div key={index} className="col-span-2">
+                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{field.label}</label>
+                                        <input
+                                            type="file"
+                                            name={field.name}
+                                            multiple
+                                            onChange={handleChange}
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                                        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                                                        dark:focus:border-blue-500"
+                                        />
+                                        {/* Optional: Display the list of uploaded files */}
+                                        {files[field.name] && (
+                                            <ul className="mt-2">
+                                                {files[field.name].map((file, i) => (
+                                                    <li key={i} className="text-sm text-gray-600 dark:text-gray-400">
+                                                        {file.name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                );
                             default:
                                 return null;
                         }
@@ -114,7 +152,7 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
                 <div className="mt-4 flex flex-col space-y-2 md:space-y-0 md:space-x-2 md:flex-row ">
                     <Link href="/portal">
                         <button
-                            type="submit"
+                            type="button"
                             className="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none 
                                 focus:ring-teal-300 font-medium rounded-lg text-sm w-full sm:w-auto md:w-[200px] px-5 py-2.5 text-center 
                                 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -122,18 +160,19 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
                             Back
                         </button>
                     </Link>
-                    <button
-                        type="submit"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none 
+                    <Link href="/portal/sended">
+                        <button
+                            type="submit"
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none 
                                 focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto md:w-[200px] px-5 py-2.5 text-center 
                                 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Next
-                    </button>
+                        >
+                            Next
+                        </button>
+                    </Link>
                 </div>
             </form>
         </div>
-
     );
 };
 

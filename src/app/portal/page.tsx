@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const PortalDenuncias = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-cyan-600">
@@ -37,9 +39,11 @@ const PortalDenuncias = () => {
                 <div className="w-full md:w-5/12 p-8 flex flex-col justify-between">
                     <div className="mb-6">
                         <h2 className="text-xl font-semibold mb-4">Ingresar nueva denuncia</h2>
-                        <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
-                            Continuar
-                        </button>
+                        <Link href='/portal/form'>
+                            <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
+                                Continuar
+                            </button>
+                        </Link>
                     </div>
 
                     <div>
@@ -54,9 +58,11 @@ const PortalDenuncias = () => {
                             placeholder="Clave"
                             className="w-full p-3 border border-gray-300 rounded-md mb-6"
                         />
-                        <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
-                            Continuar
-                        </button>
+                        <Link href='/portal/form'>
+                            <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
+                                Continuar
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

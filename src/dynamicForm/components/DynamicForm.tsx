@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FormFields } from '../interfaces/form-fields';
+import Link from 'next/link';
 
 interface Props {
     fields: FormFields[];
@@ -26,85 +27,113 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
-            <h2 className="text-xl font-semibold mb-6">Canal de Denuncias</h2>
-            <div className="grid grid-cols-2 gap-4">
-                {fields.map((field, index) => {
-                    if (!field.visible) return null;
+        <div className="container my-auto mx-auto py-10 px-4">
+            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 w-full mx-auto">
+                <h2 className="text-3xl font-semibold mb-6 text-center">Canal de Denuncias</h2>
+                <div className="grid gap-6 mb-6 lg:grid-cols-2">
+                    {fields.map((field, index) => {
+                        if (!field.visible) return null;
 
-                    switch (field.type) {
-                        case 'text':
-                        case 'email':
-                            return (
-                                <div key={index} className="col-span-1">
-                                    <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                                    <input
-                                        type={field.type}
-                                        name={field.name}
-                                        defaultValue={field.defaultValue || ''}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    />
-                                </div>
-                            );
-                        case 'boolean':
-                            return (
-                                <div key={index} className="col-span-2">
-                                    <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                                    <input
-                                        type="checkbox"
-                                        name={field.name}
-                                        defaultChecked={field.default}
-                                        onChange={handleChange}
-                                        className="mt-1"
-                                    />
-                                </div>
-                            );
-                        case 'text-area':
-                            return (
-                                <div key={index} className="col-span-2">
-                                    <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                                    <textarea
-                                        name={field.name}
-                                        defaultValue={field.defaultValue || ''}
-                                        onChange={handleChange}
-                                        rows={4}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    ></textarea>
-                                </div>
-                            );
-                        case 'array-text':
-                            return (
-                                <div key={index} className="col-span-1">
-                                    <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                                    <select
-                                        name={field.name}
-                                        multiple
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    >
-                                        {field.options?.map((option, i) => (
-                                            <option key={i} value={option}>
-                                                {option}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            );
-                        default:
-                            return null;
-                    }
-                })}
-            </div>
-            <div className="mt-4">
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    Continuar
-                </button>
-            </div>
-        </form>
+                        switch (field.type) {
+                            case 'text':
+                            case 'email':
+                                return (
+                                    <div key={index}>
+                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{field.label}</label>
+                                        <input
+                                            type={field.type}
+                                            name={field.name}
+                                            defaultValue={field.default || ''}
+                                            onChange={handleChange}
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                                        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                                                        dark:focus:border-blue-500"
+                                            required
+                                        />
+                                    </div>
+                                );
+                            case 'boolean':
+                                return (
+                                    <div key={index} className="col-span-2 flex items-start mb-6">
+                                        <div className="flex items-center h-5">
+                                            <input
+                                                type="checkbox"
+                                                name={field.name}
+                                                defaultChecked={field.default}
+                                                onChange={handleChange}
+                                                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 
+                                                        dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                                            />
+                                        </div>
+                                        <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-400">{field.label}</label>
+                                    </div>
+                                );
+                            case 'text-area':
+                                return (
+                                    <div key={index} className="col-span-2">
+                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{field.label}</label>
+                                        <textarea
+                                            name={field.name}
+                                            defaultValue={field.default || ''}
+                                            onChange={handleChange}
+                                            rows={4}
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                                        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                                                        dark:focus:border-blue-500"
+                                        ></textarea>
+                                    </div>
+                                );
+                            case 'array-text':
+                                return (
+                                    <div key={index}>
+                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{field.label}</label>
+                                        <select
+                                            name={field.name}
+                                            multiple
+                                            onChange={handleChange}
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                                                    dark:focus:border-blue-500"
+                                        >
+                                            {field.options?.map((option, i) => (
+                                                <option key={i} value={option}>
+                                                    {option}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                );
+                            default:
+                                return null;
+                        }
+                    })}
+                </div>
+                <div className="mt-4 flex flex-col space-y-2 md:space-y-0 md:space-x-2 md:flex-row ">
+                    <Link href="/portal">
+                        <button
+                            type="submit"
+                            className="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none 
+                                focus:ring-teal-300 font-medium rounded-lg text-sm w-full sm:w-auto md:w-[200px] px-5 py-2.5 text-center 
+                                dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                        >
+                            Back
+                        </button>
+                    </Link>
+                    <button
+                        type="submit"
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none 
+                                focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto md:w-[200px] px-5 py-2.5 text-center 
+                                dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+
     );
 };
 

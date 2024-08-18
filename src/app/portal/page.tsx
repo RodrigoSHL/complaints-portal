@@ -1,16 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/assets/logo.png"
 
 const PortalDenuncias = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-cyan-600">
+        <div className="min-h-screen flex items-center justify-center bg-cyan-600">            
             <div className="bg-white rounded-lg shadow-md p-10 flex flex-col md:flex-row w-10/12">
                 {/* Sección de la izquierda */}
                 <div className="w-full md:w-7/12 p-8">
-                    <img
-                        src="/logo.png"
-                        alt="HCMFront Logo"
-                        className="w-40 mb-8"
-                    />
                     <h1 className="text-3xl font-bold mb-4">Canal de Denuncias</h1>
                     <p className="text-gray-600 mb-6">
                         En [Nombre de Empresa] tu voz cuenta: Denuncia segura y confidencial
@@ -58,7 +55,7 @@ const PortalDenuncias = () => {
                             placeholder="Clave"
                             className="w-full p-3 border border-gray-300 rounded-md mb-6"
                         />
-                        <Link href='/portal/form'>
+                        <Link href='/portal/complaint-state'>
                             <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
                                 Continuar
                             </button>

@@ -5,11 +5,6 @@ const ConfirmacionDenuncia = () => {
         <div className="min-h-screen flex items-center justify-center bg-cyan-600">
             <div className="bg-white rounded-lg shadow-md p-10 w-full lg:w-8/12">
                 <div className="flex items-center mb-8">
-                    <img
-                        src="/logo.png"
-                        alt="HCMFront Logo"
-                        className="w-32 lg:w-40 mr-4"
-                    />
                     <h1 className="text-2xl lg:text-3xl font-bold">Canal de Denuncias</h1>
                 </div>
 

@@ -160,16 +160,14 @@ const DynamicForm = ({ fields, onSubmit }: Props) => {
                             Back
                         </button>
                     </Link>
-                    <Link href="/portal/sended">
-                        <button
-                            type="submit"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none 
+                    <button
+                        type="submit"
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none 
                                 focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto md:w-[200px] px-5 py-2.5 text-center 
                                 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-                            Next
-                        </button>
-                    </Link>
+                    >
+                        Next
+                    </button>
                 </div>
             </form>
         </div>

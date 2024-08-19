@@ -67,7 +67,7 @@ export default function FieldsManagerPage() {
         console.log(updatedField);
         try {
             await fetch(`${endpoint}/${id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -96,7 +96,7 @@ export default function FieldsManagerPage() {
 
     const handleToggleVisible = async (field: FormFields) => {
         const updatedField = { ...field, visible: !field.visible };
-        await handleUpdate(field.name, updatedField);
+        await handleUpdate(field._id, updatedField);
     };
 
 
@@ -187,7 +187,7 @@ export default function FieldsManagerPage() {
                                     />
                                 </div>
                                 <button
-                                    onClick={() => setMenuOpen(menuOpen === field.name ? null : field.name)}
+                                    onClick={() => setMenuOpen(menuOpen === field._id ? null : field._id)}
                                     className="text-gray-500 hover:text-gray-700"
                                 >
                                     <IoEllipsisVerticalSharp />

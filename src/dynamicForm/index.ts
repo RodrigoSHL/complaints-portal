@@ -1,1 +1,1 @@
-export type { FormFields } from "./interfaces/form-fields";
+export type { IFormFields } from "./interfaces/form-fields";

@@ -31,3 +31,36 @@ body {
     text-wrap: balance;
   }
 }
+
+/* styles/globals.css o en el componente si usas css-in-js */
+.toggle-switch {
+  appearance: none;
+  width: 2.5rem;
+  height: 1.25rem;
+  background-color: #ddd;
+  border-radius: 9999px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.toggle-switch:checked {
+  background-color: #06b6d4; /* cian */
+}
+
+.toggle-switch:before {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: white;
+  border-radius: 9999px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.toggle-switch:checked:before {
+  transform: translateX(1.25rem);
+}

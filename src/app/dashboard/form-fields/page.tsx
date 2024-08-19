@@ -75,7 +75,7 @@ export default function FieldsManagerPage() {
             });
             setFields((prevFields) =>
                 prevFields.map((field) =>
-                    field.name === id ? { ...field, ...updatedField } : field
+                    field._id === id ? { ...field, ...updatedField } : field
                 )
             );
         } catch (error) {
@@ -194,7 +194,7 @@ export default function FieldsManagerPage() {
 
                                 </button>
 
-                                {menuOpen === field.name && (
+                                {menuOpen === field._id && (
                                     <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow-lg z-10">
                                         <button
                                             onClick={() => openEditModal(field)}

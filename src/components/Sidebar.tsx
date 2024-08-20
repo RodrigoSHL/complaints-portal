@@ -9,10 +9,10 @@ export const Sidebar = () => {
 
     const menuItems = [
         {
-            path: "/dashboard/pokemons",
+            path: "/dashboard/complaints",
             icon: <GrDomain size={40} />,
-            title: "Portal Denuncias",
-            subtitle: "Pokemon Folder"
+            title: "Complain Channel",
+            subtitle: "Complaints List"
         },
         {
             path: "/dashboard/form-fields",

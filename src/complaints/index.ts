@@ -1,0 +1,1 @@
+export type { IComplaint } from "./interfaces/complaints";

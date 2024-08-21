@@ -2,23 +2,26 @@
 export interface Metadata {
   department: string;
   priority: string;
-  category: string;
 }
 
 export interface IComplaint {
   _id: string;
-  title: string;
+  fullNameComplainant: string;
+  documentNumber: string;
+  emailComplainant: string;
   description: string;
-  complainant: string;
-  defendant: string;
+  fullNameDefendant: string;
   status: string;
   dateFiled: string;
+  dueDate: string;
+  resolution: string | null;
   assignedTo: string;
-  createdAt: string;
-  updatedAt: string;
-  idComplaint: string;
   metadata: Metadata;
   isDeleted: boolean;
-  deletedAt: string;
+  deletedAt: string | null;
+  idComplaint: string;
+  passComplaint: string;
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }

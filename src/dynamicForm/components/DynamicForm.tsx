@@ -4,8 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { IFormFields } from '../interfaces/form-fields';
 import FormFields from './FormFields';
 
+
+
 const DynamicForm = () => {
     const [dynamicField, setDynamicField] = useState<IFormFields[]>([]);
+    const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';
 
     // const dynamicFieldMock: FormFields[] = [
     //     { name: 'anonymousComplaint', label: 'Anonymous Complaint', type: 'boolean', visible: true, default: true, defaultValue: 'some name' },
@@ -44,10 +47,23 @@ const DynamicForm = () => {
         fetchFields();
     }, []);
 
-    const handleSubmit = (formData: { [key: string]: any }) => {
-        console.log('Form Data Submitted:', formData);
-        // Aquí es donde envías los datos a tu backend, por ejemplo, con fetch o axios
-        // fetch('/api/submit', { method: 'POST', body: JSON.stringify(formData) });
+
+    
+
+    const handleSubmit = async (formData: { [key: string]: any }) => {
+        //console.log('Form Data Submitted:', formData);
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+        try {
+            
+        } catch (error) {
+            console.error('Error creating field:', error);
+        }
     };
 
     return (

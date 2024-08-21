@@ -17,10 +17,10 @@ const DetailModal: React.FC<DetailModalProps> = ({ complaint, isOpen, onClose })
                 <h2 className="text-xl font-semibold mb-4">Complaint Details</h2>
                 <div className="space-y-4">
                     <p><strong>Complaint ID:</strong> {complaint.idComplaint}</p>
-                    <p><strong>Title:</strong> {complaint.title}</p>
+                    <p><strong>Email:</strong> {complaint.emailComplainant}</p>
                     <p><strong>Description:</strong> {complaint.description}</p>
-                    <p><strong>Complainant:</strong> {complaint.complainant}</p>
-                    <p><strong>Defendant:</strong> {complaint.defendant}</p>
+                    <p><strong>Complainant:</strong> {complaint.fullNameComplainant}</p>
+                    <p><strong>Defendant:</strong> {complaint.fullNameDefendant}</p>
                     <p><strong>Status:</strong> {complaint.status}</p>
                     <p><strong>Assigned To:</strong> {complaint.assignedTo}</p>
                     <p><strong>Date Filed:</strong> {format(new Date(complaint.dateFiled), 'dd/MM/yyyy HH:mm')}</p>

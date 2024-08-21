@@ -82,7 +82,7 @@ const ComplaintList: React.FC = () => {
                     <thead>
                         <tr className="text-left bg-gray-200">
                             <th className="p-3 border-b">Complaint ID</th>
-                            <th className="p-3 border-b">Title</th>
+                            <th className="p-3 border-b">Email</th>
                             <th className="p-3 border-b">Description</th>
                             <th className="p-3 border-b">Complainant</th>
                             <th className="p-3 border-b">Defendant</th>
@@ -98,10 +98,10 @@ const ComplaintList: React.FC = () => {
                         {complaints.map((complaint) => (
                             <tr key={complaint._id} className="hover:bg-gray-100">
                                 <td className="p-3 border-b">{complaint.idComplaint}</td>
-                                <td className="p-3 border-b">{complaint.title}</td>
+                                <td className="p-3 border-b">{complaint.emailComplainant}</td>
                                 <td className="p-3 border-b">{complaint.description}</td>
-                                <td className="p-3 border-b">{complaint.complainant}</td>
-                                <td className="p-3 border-b">{complaint.defendant}</td>
+                                <td className="p-3 border-b">{complaint.fullNameComplainant}</td>
+                                <td className="p-3 border-b">{complaint.fullNameDefendant}</td>
                                 <td className="p-3 border-b">
                                     <span className={`flex items-center space-x-2 ${complaint.status === 'resolved' ? 'text-green-600' : 'text-yellow-600'}`}>
                                         <span className={`h-3 w-3 rounded-full ${complaint.status === 'resolved' ? 'bg-green-400' : 'bg-yellow-400'}`}></span>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/assets/logo.png"
+import { TrackComplaintForm } from "@/portal/components/TrackComplaintForm";
 
 const PortalDenuncias = () => {
     return (
@@ -43,24 +44,7 @@ const PortalDenuncias = () => {
                         </Link>
                     </div>
 
-                    <div>
-                        <h2 className="text-xl font-semibold mb-4">Revisa el estado de tu denuncia</h2>
-                        <input
-                            type="text"
-                            placeholder="Número de denuncia"
-                            className="w-full p-3 border border-gray-300 rounded-md mb-4"
-                        />
-                        <input
-                            type="password"
-                            placeholder="Clave"
-                            className="w-full p-3 border border-gray-300 rounded-md mb-6"
-                        />
-                        <Link href='/portal/complaint-state'>
-                            <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
-                                Continuar
-                            </button>
-                        </Link>
-                    </div>
+                   <TrackComplaintForm />
                 </div>
             </div>
         </div>

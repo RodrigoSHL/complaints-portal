@@ -72,7 +72,7 @@ const ComplaintList: React.FC = () => {
                     <select className="border rounded px-3 py-2">
                         <option value="2024">2024</option>
                     </select>
-                    <input type="text" placeholder="Filter by month" className="border rounded px-3 py-2" />
+                    <input type="text" placeholder="Filter by month" className="hidden md:block border rounded px-3 py-2" />
                 </div>
             </div>
 

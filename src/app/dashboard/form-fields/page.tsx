@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 interface FormFields {
-    _id: string;
     name: string;
     label: string;
     type: string;
@@ -11,18 +10,19 @@ interface FormFields {
     default: boolean;
     defaultValue?: string;
     options?: string[];
+    idDynamicField: string;
 }
 
 export default function FieldsManagerPage() {
     const [fields, setFields] = useState<FormFields[]>([]);
     const [newField, setNewField] = useState<FormFields>({
-        _id: '',
         name: '',
         label: '',
         type: 'text',
         visible: true,
         default: true,
         defaultValue: '',
+        idDynamicField: '',
     });
     const [selectedField, setSelectedField] = useState<FormFields | null>(null);
     const [menuOpen, setMenuOpen] = useState<string | null>(null);
@@ -46,18 +46,27 @@ export default function FieldsManagerPage() {
     };
 
     const handleCreate = async () => {
-        console.log(newField);
+        console.log(newField)
+        const { idDynamicField, ...newFieldData } = newField;
+
         try {
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newField),
+                body: JSON.stringify(newFieldData),
             });
-            const createdField = await response.json();
+
+            const { idDynamicField } = await response.json();
+
+            // Combina el campo nuevo con el ID generado por el backend
+            const createdField = { ...newFieldData, idDynamicField };
+
             setFields((prevFields) => [...prevFields, createdField]);
-            setNewField({ _id: '', name: '', label: '', type: 'text', visible: true, default: true, defaultValue: '' });
+
+            // Resetea el formulario
+            setNewField({ idDynamicField: '', name: '', label: '', type: 'text', visible: true, default: true, defaultValue: '' });
         } catch (error) {
             console.error('Error creating field:', error);
         }
@@ -75,7 +84,7 @@ export default function FieldsManagerPage() {
             });
             setFields((prevFields) =>
                 prevFields.map((field) =>
-                    field._id === id ? { ...field, ...updatedField } : field
+                    field.idDynamicField === id ? { ...field, ...updatedField } : field
                 )
             );
         } catch (error) {
@@ -87,8 +96,11 @@ export default function FieldsManagerPage() {
         try {
             await fetch(`${endpoint}/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
-            setFields((prevFields) => prevFields.filter((field) => field._id !== id));
+            setFields((prevFields) => prevFields.filter((field) => field.idDynamicField !== id));
         } catch (error) {
             console.error('Error deleting field:', error);
         }
@@ -96,7 +108,7 @@ export default function FieldsManagerPage() {
 
     const handleToggleVisible = async (field: FormFields) => {
         const updatedField = { ...field, visible: !field.visible };
-        await handleUpdate(field._id, updatedField);
+        await handleUpdate(field.idDynamicField, updatedField);
     };
 
 
@@ -113,10 +125,12 @@ export default function FieldsManagerPage() {
 
     const handleEditSubmit = () => {
         if (selectedField) {
-            handleUpdate(selectedField._id, selectedField);
+            handleUpdate(selectedField.idDynamicField, selectedField);
             closeEditModal();
         }
     };
+
+    console.log('newField', newField)
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">
@@ -151,6 +165,8 @@ export default function FieldsManagerPage() {
                             <option value="text-area">Text Area</option>
                             <option value="array-text">Array Text</option>
                             <option value="file">File</option>
+                            <option value="date">Date</option>
+
                         </select>
                         <input
                             type="text"
@@ -171,7 +187,7 @@ export default function FieldsManagerPage() {
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Existing Fields</h2>
                 <ul className="space-y-4">
                     {fields.map((field) => (
-                        <li key={field.name} className="bg-gray-50 p-4 rounded-md shadow-sm flex justify-between items-center">
+                        <li key={field.idDynamicField} className="bg-gray-50 p-4 rounded-md shadow-sm flex justify-between items-center">
                             <div>
                                 <p className="text-lg font-medium text-gray-800">{field.label}</p>
                                 <p className="text-sm text-gray-600">Type: {field.type}</p>
@@ -187,14 +203,14 @@ export default function FieldsManagerPage() {
                                     />
                                 </div>
                                 <button
-                                    onClick={() => setMenuOpen(menuOpen === field._id ? null : field._id)}
+                                    onClick={() => setMenuOpen(menuOpen === field.idDynamicField ? null : field.idDynamicField)}
                                     className="text-gray-500 hover:text-gray-700"
                                 >
                                     <IoEllipsisVerticalSharp />
 
                                 </button>
 
-                                {menuOpen === field._id && (
+                                {menuOpen === field.idDynamicField && (
                                     <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow-lg z-10">
                                         <button
                                             onClick={() => openEditModal(field)}
@@ -203,7 +219,7 @@ export default function FieldsManagerPage() {
                                             Edit
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(field._id)}
+                                            onClick={() => handleDelete(field.idDynamicField)}
                                             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                                         >
                                             Delete

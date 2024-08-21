@@ -1,36 +1,57 @@
-import Image from "next/image"
-import path from "path"
-import { IoBrowsersOutline, IoCalculator, IoFolder, IoHeartOutline, IoLogoReact } from "react-icons/io5"
-import { SidebarMenuItem } from "./SidebarMenuItem"
+import Image from "next/image";
+import { IoBrowsersOutline, IoCalculator, IoFolder, IoHeartOutline, IoLogoReact } from "react-icons/io5";
+import { SidebarMenuItem } from "./SidebarMenuItem";
 import { FaWpforms } from "react-icons/fa6";
 import { GrDomain } from "react-icons/gr";
+import { RxDashboard } from "react-icons/rx";
+import { PiTextAUnderlineFill } from "react-icons/pi";
+import Link from "next/link";
 
 export const Sidebar = () => {
 
-    const menuItems = [
+    const functionalityItems = [
+        {
+            path: "/dashboard/main",
+            icon: <RxDashboard size={40} />,
+            title: "Dashboard",
+            subtitle: "Control panel"
+        },
         {
             path: "/dashboard/complaints",
             icon: <GrDomain size={40} />,
             title: "Complain Channel",
             subtitle: "Complaints List"
-        },
+        }
+    ];
+
+    const configurationItems = [
         {
             path: "/dashboard/form-fields",
             icon: <FaWpforms size={40} />,
-            title: "Formulario",
+            title: "Forms",
             subtitle: "Form Configuration"
-        }
-    ]
+        },
+        {
+            path: "/dashboard/text-fields",
+            icon: <PiTextAUnderlineFill size={40} />,
+            title: "Texts",
+            subtitle: "Text Configuration"
+        },
+
+    ];
+
     return (
         <div id="menu"
             style={{ width: '400px' }}
             className="bg-gray-900 min-h-screen z-10 text-slate-300 w-64 left-0 overflow-y-scroll">
             <div id="logo" className="my-4 px-6">
-                <h1 className="flex items-center text-lg md:text-2xl font-bold text-white">
-                    <IoLogoReact className="mr-2" />
-                    <span>Dash</span>
-                    <span className="text-blue-500">8</span>.
-                </h1>
+                <Link href={'/portal'}>
+                    <h1 className="flex items-center text-lg md:text-2xl font-bold text-white">
+                        <IoLogoReact className="mr-2" />
+                        <span>Dash</span>
+                        <span className="text-blue-500">8</span>.
+                    </h1>
+                </Link>
                 <p className="text-slate-500 text-sm">Manage your actions and activities</p>
             </div>
             <div id="profile" className="px-6 py-10">
@@ -49,11 +70,20 @@ export const Sidebar = () => {
                 </a>
             </div>
             <div id="nav" className="w-full px-6">
+                <div className="mb-4">
+                    <h2 className="text-sm font-semibold text-slate-500 uppercase">Functionality</h2>
+                    {functionalityItems.map(item => (
+                        <SidebarMenuItem key={item.path} {...item} />
+                    ))}
+                </div>
 
-                {menuItems.map(item => (
-                    <SidebarMenuItem key={item.path} {...item} />
-                ))}
-
+                <div className="mt-8">
+                    <h2 className="text-sm font-semibold text-slate-500 uppercase">Configuration</h2>
+                    {configurationItems.map(item => (
+                        <SidebarMenuItem key={item.path} {...item} />
+                    ))}
+                </div>
             </div>
-        </div>)
-}
+        </div>
+    );
+};

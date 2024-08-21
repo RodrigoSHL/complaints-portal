@@ -36,7 +36,7 @@ const PortalDenuncias = () => {
                 <div className="w-full md:w-5/12 p-8 flex flex-col justify-between">
                     <div className="mb-6">
                         <h2 className="text-xl font-semibold mb-4">Ingresar nueva denuncia</h2>
-                        <Link href='/portal/form'>
+                        <Link href='/portal/complaint-form'>
                             <button className="w-full bg-cyan-500 text-white py-3 rounded-md">
                                 Continuar
                             </button>

@@ -1,1 +1,2 @@
-export type { IFormFields } from "./interfaces/form-fields";
+export type { ITextFields } from "./interfaces/text-fields";
+export { ExitText } from "./components/ExitText";

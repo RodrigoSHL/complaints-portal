@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { CiEdit } from "react-icons/ci";
 
 export const ExitText = () => {
 
@@ -23,21 +24,28 @@ export const ExitText = () => {
                         onChange={(e) => setTitle(e.target.value)}
                         className="text-2xl lg:text-3xl font-bold w-full border-none focus:ring-0"
                     />
+                    <CiEdit className="text-gray-500 ml-2" size={24} />
                 </div>
 
-                <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="text-xl lg:text-2xl font-semibold mb-4 w-full border-none focus:ring-0"
-                />
+                <div className="flex items-center mb-4">
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        className="text-xl lg:text-2xl font-semibold w-full border-none focus:ring-0"
+                    />
+                    <CiEdit className="text-gray-500 ml-2" size={24} />
+                </div>
 
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="text-gray-600 mb-6 w-full border-none focus:ring-0"
-                    rows={5}
-                />
+                <div className="flex items-center mb-6">
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="text-gray-600 w-full border-none focus:ring-0"
+                        rows={5}
+                    />
+                    <CiEdit className="text-gray-500 ml-2" size={24} />
+                </div>
 
                 <div className="flex justify-end">
                     <button
@@ -53,5 +61,6 @@ export const ExitText = () => {
                     </Link>
                 </div>
             </form>
-        </div>)
-}
+        </div>
+    );
+};

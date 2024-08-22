@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { IoBrowsersOutline, IoCalculator, IoFolder, IoHeartOutline, IoLogoReact } from "react-icons/io5";
+import { IoPeopleCircleSharp, IoLogoReact } from "react-icons/io5";
 import { SidebarMenuItem } from "./SidebarMenuItem";
 import { FaWpforms } from "react-icons/fa6";
 import { GrDomain } from "react-icons/gr";
@@ -37,7 +37,12 @@ export const Sidebar = () => {
             title: "Texts",
             subtitle: "Text Configuration"
         },
-
+        {
+            path: "/dashboard/users-configuration",
+            icon: <IoPeopleCircleSharp size={40} />,
+            title: "Users",
+            subtitle: "Users Configuration"
+        }
     ];
 
     return (

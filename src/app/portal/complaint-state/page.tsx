@@ -1,6 +1,31 @@
+import { IComplaint } from "@/complaints";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export const EstadoDenuncia = () => {
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+const getComplaint = async (id: string): Promise<IComplaint> => {
+  const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';
+
+  try {
+    const complaint = await fetch(`${endpoint}/${id}`, {
+      cache: "force-cache" //cambiar esto en un futuro
+    }).then(res => res.json());
+    return complaint;
+  } catch (error) {
+    notFound();
+  }
+
+}
+export default async function EstadoDenuncia({ params }: Props) {
+
+  const complaint = await getComplaint(params.id);
+
+  console.log(complaint);
   return (
     <div className="min-h-screen bg-cyan-600">
 
@@ -80,5 +105,3 @@ export const EstadoDenuncia = () => {
     </div>
   );
 };
-
-export default EstadoDenuncia;

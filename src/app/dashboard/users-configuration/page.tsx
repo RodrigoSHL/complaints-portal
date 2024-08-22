@@ -1,8 +1,11 @@
+import UserManagement from '@/users/components/UserManagement'
 import React from 'react'
 
 const UsersPage = () => {
   return (
-    <div>UsersPage</div>
+    <>
+      <UserManagement/>
+    </>
   )
 }
 

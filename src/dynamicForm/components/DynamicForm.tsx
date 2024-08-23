@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { IFormFields } from '../interfaces/form-fields';
 import FormFields from './FormFields';
-
+import { useRouter } from 'next/navigation';
 
 
 const DynamicForm = () => {
     const [dynamicField, setDynamicField] = useState<IFormFields[]>([]);
     const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';
+    const router = useRouter();
 
     // const dynamicFieldMock: FormFields[] = [
     //     { name: 'anonymousComplaint', label: 'Anonymous Complaint', type: 'boolean', visible: true, default: true, defaultValue: 'some name' },
@@ -48,7 +49,7 @@ const DynamicForm = () => {
     }, []);
 
 
-    
+
 
     const handleSubmit = async (formData: { [key: string]: any }) => {
         //console.log('Form Data Submitted:', formData);
@@ -60,7 +61,17 @@ const DynamicForm = () => {
             body: JSON.stringify(formData),
         });
         try {
-            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('data', data)
+                if (data.idComplaint) { // Si la validación es exitosa
+                    router.push(`/portal/sended/${data.idComplaint}`);
+                } else {
+                    console.error('La validación falló');
+                }
+            } else {
+                console.error('Error al validar la denuncia');
+            }
         } catch (error) {
             console.error('Error creating field:', error);
         }

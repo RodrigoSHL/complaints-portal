@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { LoadingScreen } from '@/components/Loading/LoadingScreen';
 
-export const TrackComplaintForm: React.FC = () => {
+export const ComplaintStatusPanel: React.FC = () => {
     const [complaintId, setComplaintId] = useState('');
     const [passComplaint, setPassComplaint] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
 
         const response = await fetch('https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint/validate', {
             method: 'POST',
@@ -19,6 +22,8 @@ export const TrackComplaintForm: React.FC = () => {
             },
             body: JSON.stringify({ id: complaintId, pass: passComplaint }),
         });
+
+        setIsLoading(false);
 
         if (response.ok) {
             const data = await response.json();
@@ -34,6 +39,8 @@ export const TrackComplaintForm: React.FC = () => {
 
     return (
         <div>
+            {isLoading && <LoadingScreen />}
+
             <h2 className="text-xl font-semibold mb-4">Revisa el estado de tu denuncia</h2>
             <input
                 type="text"

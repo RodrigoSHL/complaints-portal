@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/assets/logo.png"
-import { TrackComplaintForm } from "@/portal/components/ComplaintStatusPanel";
+import { ComplaintStatusPanel } from "@/portal/components/ComplaintStatusPanel";
 
 const PortalDenuncias = () => {
     return (
@@ -44,7 +44,7 @@ const PortalDenuncias = () => {
                         </Link>
                     </div>
 
-                   <TrackComplaintForm />
+                   <ComplaintStatusPanel />
                 </div>
             </div>
         </div>

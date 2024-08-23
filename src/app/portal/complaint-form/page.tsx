@@ -1,8 +1,9 @@
 import DynamicForm from "@/dynamicForm/components/DynamicForm";
+
 export const metadata = {
-    title: "Form Fields Configuration¿",
-    description: "Configure the form fields",
-    date: "2021-07-19",
+    title: "Complaint Form",
+    description: "Complete a simple form to describe in detail what happened.",
+    date: "2024-08-01",
     tags: ['form', 'form-fields', 'configuration']
   }
   

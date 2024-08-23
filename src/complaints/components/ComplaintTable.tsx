@@ -25,8 +25,6 @@ const ComplaintTable: React.FC<ComplaintTableProps> = ({ complaints, onOpenModal
                 <thead>
                     <tr className="text-left bg-gray-200">
                         <th className="p-3 border-b">Complaint ID</th>
-                        <th className="p-3 border-b">Email</th>
-                        <th className="p-3 border-b">Description</th>
                         <th className="p-3 border-b">Complainant</th>
                         <th className="p-3 border-b">Defendant</th>
                         <th className="p-3 border-b">Status</th>
@@ -41,8 +39,6 @@ const ComplaintTable: React.FC<ComplaintTableProps> = ({ complaints, onOpenModal
                     {complaints.map((complaint) => (
                         <tr key={complaint._id} className="hover:bg-gray-100">
                             <td className="p-3 border-b">{complaint.idComplaint}</td>
-                            <td className="p-3 border-b">{complaint.emailComplainant}</td>
-                            <td className="p-3 border-b">{complaint.description}</td>
                             <td className="p-3 border-b">{complaint.fullNameComplainant}</td>
                             <td className="p-3 border-b">{complaint.fullNameDefendant}</td>
                             <td className="p-3 border-b">

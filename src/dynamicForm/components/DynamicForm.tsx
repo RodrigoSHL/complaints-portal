@@ -4,12 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { IFormFields } from '../interfaces/form-fields';
 import FormFields from './FormFields';
 import { useRouter } from 'next/navigation';
+import { LoadingScreen } from '@/components/Loading/LoadingScreen';
 
 
 const DynamicForm = () => {
     const [dynamicField, setDynamicField] = useState<IFormFields[]>([]);
     const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     // const dynamicFieldMock: FormFields[] = [
     //     { name: 'anonymousComplaint', label: 'Anonymous Complaint', type: 'boolean', visible: true, default: true, defaultValue: 'some name' },
@@ -53,6 +55,8 @@ const DynamicForm = () => {
 
     const handleSubmit = async (formData: { [key: string]: any }) => {
         //console.log('Form Data Submitted:', formData);
+        setIsLoading(true);
+
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -60,6 +64,9 @@ const DynamicForm = () => {
             },
             body: JSON.stringify(formData),
         });
+
+        setIsLoading(false);
+
         try {
             if (response.ok) {
                 const data = await response.json();
@@ -79,10 +86,12 @@ const DynamicForm = () => {
 
     return (
         <div className="min-h-screen w-full bg-cyan-600 flex items-center justify-center">
+            {isLoading && <LoadingScreen />}
+
             {dynamicField.length > 0 ? (
                 <FormFields fields={dynamicField} onSubmit={handleSubmit} />
             ) : (
-                <p>Loading form fields...</p>
+                <LoadingScreen />
             )}
         </div>
     );

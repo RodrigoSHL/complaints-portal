@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 
-interface CreateUserModalProps {
+interface Props {
   onClose: () => void;
 }
 
-const CreateUserModal: React.FC<CreateUserModalProps> = ({ onClose }) => {
+export default function CreateUserModal({ onClose }: Props) {
+
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [roles, setRoles] = useState<string[]>([]);
 
@@ -20,16 +20,30 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ onClose }) => {
     );
   };
 
-  const handleSubmit = () => {
-    // Lógica para enviar los datos de creación del usuario
-    console.log({ email, name, password, roles });
-    onClose();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ email, password, roles });
+
+    const response = await fetch('https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, role : roles }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        console.log('data', data);
+    } else {
+        console.error('Error al validar la denuncia');
+    }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg w-2/3">
-        <h2 className="text-2xl mb-4">Crear Usuario</h2>
+        <h2 className="text-2xl mb-4">Create User</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Email</label>
           <input 
@@ -40,16 +54,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ onClose }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Nombre</label>
-          <input 
-            type="text" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm" 
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+          <label className="block text-sm font-medium text-gray-700">Password</label>
           <input 
             type="password" 
             value={password} 
@@ -60,7 +65,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ onClose }) => {
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Roles</label>
           <div className="flex space-x-4">
-            {['comite', 'usuario', 'administrador'].map((role) => (
+            {['commission', 'administrator'].map((role) => (
               <label key={role} className="inline-flex items-center">
                 <input 
                   type="checkbox" 
@@ -78,17 +83,15 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ onClose }) => {
           <button 
             onClick={onClose} 
             className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
-            Cancelar
+            Cancel
           </button>
           <button 
             onClick={handleSubmit} 
             className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none">
-            Crear
+            Create
           </button>
         </div>
       </div>
     </div>
   );
 };
-
-export default CreateUserModal;

@@ -2,39 +2,36 @@
 
 import React, { useState } from 'react';
 import CreateUserModal from './CreateUserModal';
+import { IUser } from '../interfaces/user';
 
-const UserTable: React.FC = () => {
+interface Props {
+  users: IUser[];
+}
+
+const UserTable: React.FC<Props> = ({ users }) => {
   const [showModal, setShowModal] = useState(false);
-
-  const usuarios = [
-    { email: 'juan@example.com', name: 'Juan Pérez', roles: ['comite'] },
-    { email: 'ana@example.com', name: 'Ana Gómez', roles: ['usuario', 'administrador'] },
-    { email: 'pedro@example.com', name: 'Pedro López', roles: ['usuario'] },
-  ];
-
+  const [usersList, setUsersList] = useState(users);
   const handleCreateUser = () => {
     setShowModal(true);
   };
 
   return (
     <div className="m-8 p-8 bg-white rounded-md shadow-md">
-      <h1 className="text-2xl font-semibold mb-4">Usuarios</h1>
+      <h1 className="text-2xl font-semibold mb-4">Users</h1>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr className="text-left bg-gray-100">
               <th className="p-2 border-b">Email</th>
-              <th className="p-2 border-b">Nombre</th>
               <th className="p-2 border-b">Roles</th>
             </tr>
           </thead>
           <tbody>
-            {usuarios.map((usuario, index) => (
+            {usersList.map((user, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="p-2 border-b">{usuario.email}</td>
-                <td className="p-2 border-b">{usuario.name}</td>
-                <td className="p-2 border-b">{usuario.roles.join(', ')}</td>
+                <td className="p-2 border-b">{user.email}</td>
+                <td className="p-2 border-b">{user.role.join(', ')}</td>
               </tr>
             ))}
           </tbody>
@@ -45,7 +42,7 @@ const UserTable: React.FC = () => {
         <button 
           onClick={handleCreateUser} 
           className="bg-cyan-600 text-white py-2 px-6 rounded-md">
-          Crear Usuario
+          Create
         </button>
       </div>
 

@@ -1,92 +1,41 @@
-"use client";
 
-import React, { useState, useEffect } from 'react';
 import { IComplaint } from '@/complaints';
-import DetailModal from '@/complaints/components/DetailModal';
-import ComplaintTable from '@/complaints/components/ComplaintTable';
+import { ComplaintMain } from '@/complaints/components/ComplaintMain';
+import { notFound } from 'next/navigation';
 
-const ComplaintList: React.FC = () => {
-    const [complaints, setComplaints] = useState<IComplaint[]>([]);
-    const [selectedComplaint, setSelectedComplaint] = useState<IComplaint | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';
 
-    const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';
+const getComplaint = async (): Promise<IComplaint[]> => {
+    try {
+        const response = await fetch(`${endpoint}`, {
+            cache: "no-store", // Usar "no-store" para asegurar una solicitud fresca
+        });
 
-    useEffect(() => {
-        fetchComplaints();
-    }, []);
-
-    const fetchComplaints = async () => {
-        try {
-            const response = await fetch(endpoint);
-            const data = await response.json();
-            setComplaints(data);
-        } catch (error) {
-            console.error('Error fetching complaints:', error);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch complaint: ${response.status}`);
         }
-    };
 
-    const handleOpenModal = (complaint: IComplaint) => {
-        setSelectedComplaint(complaint);
-        setIsModalOpen(true);
-    };
+        const complaint: IComplaint[] = await response.json();
+        console.log('complaint', complaint)
+        return complaint;
+    } catch (error) {
+        console.error("Error fetching complaint:", error);
+        notFound(); // Solo llamar a notFound si ocurre un error real
+    }
+}
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setSelectedComplaint(null);
-    };
+export default async function ComplaintList() {
+
+    const complaints: IComplaint[] = await getComplaint();
+
+    if (!complaints) {
+        return notFound(); // Manejar el caso en el que no se obtiene una denuncia
+    }
 
     return (
-        <div className="p-8 bg-white m-8 rounded-lg shadow-md">
-            {/* Breadcrumb */}
-            <nav className="text-gray-600 mb-4">
-                <span>Dashboard </span> /
-                <span> Complaints Channel </span> /
-                <span> Complaints</span>
-            </nav>
-
-            <h1 className="text-2xl font-semibold mb-4">Complaints</h1>
-
-            {/* Filters */}
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex space-x-4">
-                    <button className="flex items-center space-x-1 text-cyan-600">
-                        <span className="text-lg font-medium">Filters</span>
-                    </button>
-                    <button className="text-cyan-600 font-medium">Add Filter</button>
-                </div>
-                <div className="flex space-x-4">
-                    <select className="border rounded px-3 py-2">
-                        <option value="2024">2024</option>
-                    </select>
-                    <input type="text" placeholder="Filter by month" className="hidden md:block border rounded px-3 py-2" />
-                </div>
-            </div>
-
-            {/* Complaints Table */}
-            <ComplaintTable
-                complaints={complaints}
-                onOpenModal={handleOpenModal}
-            />
-
-            {/* Actions */}
-            <div className="flex justify-between items-center mt-4">
-                <button className="bg-cyan-600 text-white py-2 px-6 rounded-md">Download Complaints</button>
-                <div className="text-cyan-600 cursor-pointer flex items-center space-x-1">
-                    <span>Sort by Default</span>
-                </div>
-            </div>
-
-            {/* Modal */}
-            {selectedComplaint && (
-                <DetailModal
-                    complaint={selectedComplaint}
-                    isOpen={isModalOpen}
-                    onClose={handleCloseModal}
-                />
-            )}
-        </div>
+        <>
+            <ComplaintMain complaintList={complaints}/>
+        </>
     );
-};
 
-export default ComplaintList;
+}

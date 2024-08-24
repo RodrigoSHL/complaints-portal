@@ -3,7 +3,13 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { CiEdit } from "react-icons/ci";
 
-export const ExitText = () => {
+interface Props {
+    title: string;
+    message: string;
+    description: string;
+}
+
+export const ExitText = ({}:Props) => {
 
     const [title, setTitle] = useState("Canal de Denuncias");
     const [message, setMessage] = useState("Ha completado su denuncia");

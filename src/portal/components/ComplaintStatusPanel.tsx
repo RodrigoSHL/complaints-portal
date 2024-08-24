@@ -1,15 +1,23 @@
 "use client";
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingScreen } from '@/components/Loading/LoadingScreen';
+import ReCAPTCHA from 'react-google-recaptcha';
+interface Props {
+    siteKey: string;
+}
 
-export const ComplaintStatusPanel: React.FC = () => {
+export const ComplaintStatusPanel = ({ siteKey }: Props) => {
+
     const [complaintId, setComplaintId] = useState('');
     const [passComplaint, setPassComplaint] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
+
+    const onChange = () => {
+        console.log('Captcha value:', 'Captcha value');
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -36,7 +44,6 @@ export const ComplaintStatusPanel: React.FC = () => {
             console.error('Error al validar la denuncia');
         }
     };
-
     return (
         <div>
             {isLoading && <LoadingScreen />}
@@ -56,9 +63,11 @@ export const ComplaintStatusPanel: React.FC = () => {
                 onChange={(e) => setPassComplaint(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-md mb-6"
             />
+            <div className='mb-5 flex justify-center'>
+                <ReCAPTCHA sitekey={siteKey} onChange={onChange} />
+            </div>
             <button onClick={handleSubmit} className="w-full bg-cyan-500 text-white py-3 rounded-md">
                 Continuar
             </button>
-        </div>
-    );
-};
+        </div>)
+}

@@ -1,9 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/assets/logo.png"
 import { ComplaintStatusPanel } from "@/portal/components/ComplaintStatusPanel";
+import '../../../envConfig';
+
 
 const PortalDenuncias = () => {
+
+    const SITE_KEY: string = process.env.SITE_KEY || '';
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-cyan-600">            
             <div className="bg-white rounded-lg shadow-lg p-10 flex flex-col md:flex-row w-10/12">
@@ -44,7 +47,7 @@ const PortalDenuncias = () => {
                         </Link>
                     </div>
 
-                   <ComplaintStatusPanel />
+                   <ComplaintStatusPanel siteKey={SITE_KEY}/>
                 </div>
             </div>
         </div>

@@ -6,7 +6,6 @@ import FormFields from './FormFields';
 import { useRouter } from 'next/navigation';
 import { LoadingScreen } from '@/components/Loading/LoadingScreen';
 
-
 const DynamicForm = () => {
     const [dynamicField, setDynamicField] = useState<IFormFields[]>([]);
     const endpoint = 'https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint';

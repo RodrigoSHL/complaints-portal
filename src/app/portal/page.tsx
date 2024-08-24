@@ -9,7 +9,7 @@ const PortalDenuncias = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-cyan-600">            
-            <div className="bg-white rounded-lg shadow-lg p-10 flex flex-col md:flex-row w-10/12">
+            <div className="bg-white rounded-lg shadow-lg flex flex-col md:flex-row w-10/12 m-4 md:p-10 md:mt-2">
                 {/* Sección de la izquierda */}
                 <div className="w-full md:w-7/12 p-8">
                     <h1 className="text-3xl font-bold mb-4">Canal de Denuncias</h1>

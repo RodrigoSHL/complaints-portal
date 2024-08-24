@@ -8,7 +8,7 @@ interface Props {
 
 export const SendedView = ({complaint} : Props) => {
     return (
-        <div className="bg-white rounded-lg shadow-md p-10 w-full lg:w-8/12">
+        <div className="bg-white rounded-lg shadow-lg m-6 p-10 w-full lg:w-8/12">
             <div className="flex items-center mb-8">
                 <h1 className="text-2xl lg:text-3xl font-bold">Canal de Denuncias</h1>
             </div>

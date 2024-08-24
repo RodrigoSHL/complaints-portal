@@ -12,7 +12,7 @@ export const ViewStatusPanel = ({complaint}: Props) => {
     const [complaintInfo, setComplaintInfo] = useState(complaint);
     console.log(complaintInfo);
     return (
-        <div className="bg-white rounded-lg shadow-md p-10 w-full lg:w-8/12 mt-12">
+        <div className="bg-white rounded-lg shadow-md p-10 w-full lg:w-8/12 mt-12 mx-4">
             <div className="mb-8">
                 <h1 className="text-2xl lg:text-3xl font-bold">Canal de Denuncias</h1>
             </div>

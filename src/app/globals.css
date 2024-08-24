@@ -64,3 +64,8 @@ body {
 .toggle-switch:checked:before {
   transform: translateX(1.25rem);
 }
+
+.pagination .active .page-link {
+  background-color: #007bff;
+  color: white;
+}

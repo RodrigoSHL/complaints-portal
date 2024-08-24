@@ -4,16 +4,23 @@ import React, { useState } from 'react';
 import { IComplaint } from '../interfaces/complaints';
 import ComplaintTable from './ComplaintTable';
 import DetailModal from './DetailModal';
+import Pagination from './Pagination';
 
 interface Props {
     complaintList: IComplaint[];
 }
 
-export const ComplaintMain = ({complaintList = []}: Props) => {
-
-    const [complaints, setComplaints] = useState<IComplaint[]>(complaintList);
+export const ComplaintMain = ({ complaintList = [] }: Props) => {
+    const [complaints] = useState<IComplaint[]>(complaintList);
     const [selectedComplaint, setSelectedComplaint] = useState<IComplaint | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const complaintsPerPage = 5;
+
+    // Calcular índices para la paginación
+    const indexOfLastComplaint = currentPage * complaintsPerPage;
+    const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage;
+    const currentComplaints = complaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
 
     const handleOpenModal = (complaint: IComplaint) => {
         setSelectedComplaint(complaint);
@@ -23,6 +30,10 @@ export const ComplaintMain = ({complaintList = []}: Props) => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedComplaint(null);
+    };
+
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
     };
 
     return (
@@ -54,7 +65,7 @@ export const ComplaintMain = ({complaintList = []}: Props) => {
 
             {/* Complaints Table */}
             <ComplaintTable
-                complaints={complaints}
+                complaints={currentComplaints}
                 onOpenModal={handleOpenModal}
             />
 
@@ -66,6 +77,14 @@ export const ComplaintMain = ({complaintList = []}: Props) => {
                 </div>
             </div>
 
+            {/* Pagination */}
+            <Pagination
+                complaintsPerPage={complaintsPerPage}
+                totalComplaints={complaints.length}
+                paginate={handlePageChange}
+                currentPage={currentPage}
+            />
+
             {/* Modal */}
             {selectedComplaint && (
                 <DetailModal
@@ -74,5 +93,6 @@ export const ComplaintMain = ({complaintList = []}: Props) => {
                     onClose={handleCloseModal}
                 />
             )}
-        </div>)
-}
+        </div>
+    );
+};

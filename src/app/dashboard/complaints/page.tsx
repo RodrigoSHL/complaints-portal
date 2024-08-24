@@ -16,7 +16,6 @@ const getComplaint = async (): Promise<IComplaint[]> => {
         }
 
         const complaint: IComplaint[] = await response.json();
-        console.log('complaint', complaint)
         return complaint;
     } catch (error) {
         console.error("Error fetching complaint:", error);

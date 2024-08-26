@@ -73,11 +73,11 @@ export default function FieldsManagerPage() {
     };
 
     const handleUpdate = async (id: string, updatedField: Partial<FormFields>) => {
-        console.log(updatedField);
         try {
             await fetch(`${endpoint}/${id}`, {
                 method: 'PATCH',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedField),
@@ -91,6 +91,7 @@ export default function FieldsManagerPage() {
             console.error('Error updating field:', error);
         }
     };
+
 
     const handleDelete = async (id: string) => {
         try {
@@ -129,8 +130,6 @@ export default function FieldsManagerPage() {
             closeEditModal();
         }
     };
-
-    console.log('newField', newField)
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">

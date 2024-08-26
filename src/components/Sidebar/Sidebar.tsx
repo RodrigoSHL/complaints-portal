@@ -6,6 +6,7 @@ import { GrDomain } from "react-icons/gr";
 import { RxDashboard } from "react-icons/rx";
 import { PiTextAUnderlineFill } from "react-icons/pi";
 import Link from "next/link";
+import Logo from "@/assets/logo.png"
 
 export const Sidebar = () => {
 
@@ -52,12 +53,12 @@ export const Sidebar = () => {
             <div id="logo" className="my-4 px-6">
                 <Link href={'/portal'}>
                     <h1 className="flex items-center text-lg md:text-2xl font-bold text-white">
-                        <IoLogoReact className="mr-2" />
-                        <span>Dash</span>
-                        <span className="text-blue-500">8</span>.
+                        <Image src={Logo} alt="logo" height={30} width={30} />
+                        <span>Atom</span>
+                        <span className="text-cyan-500">Dev</span>
                     </h1>
                 </Link>
-                <p className="text-slate-500 text-sm">Manage your actions and activities</p>
+                <p className="text-slate-500 text-sm">Manage your actions and complaints</p>
             </div>
             <div id="profile" className="px-6 py-10">
                 <p className="text-slate-500">Welcome back,</p>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { IFormFields } from '../interfaces/form-fields';
 import Link from 'next/link';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -14,10 +14,9 @@ const siteKey: string = '6Lc2ry0qAAAAAOc-GBtdJr_qU37DyvIaTZZmLs91';
 const FormFields = ({ fields, onSubmit }: Props) => {
     const [formState, setFormState] = useState<{ [key: string]: any }>({});
     const [files, setFiles] = useState<{ [key: string]: File[] }>({});
+    const [validCaptcha, setValidCaptcha] = useState<any>(null);
 
-    const onChange = () => {
-        console.log('Captcha value:', 'Captcha value');
-    }
+    const captcha = useRef<any>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -41,6 +40,10 @@ const FormFields = ({ fields, onSubmit }: Props) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!captcha.current.getValue()) {
+            setValidCaptcha(false);
+            return;
+        }
         onSubmit({ ...formState, ...files });
     };
 
@@ -173,8 +176,14 @@ const FormFields = ({ fields, onSubmit }: Props) => {
                     })}
                 </div>
                 <div>
-                    <ReCAPTCHA sitekey={siteKey} onChange={onChange} />
+                    <ReCAPTCHA ref={captcha} sitekey={siteKey} />
                 </div>
+                {
+                    validCaptcha === false &&
+                    (<div className='text-red-600 mb-2'>
+                        <p>Please accept the captcha</p>
+                    </div>)
+                }
                 <div className="mt-4 flex flex-col space-y-2 md:space-y-0 md:space-x-2 md:flex-row ">
                     <Link href="/portal">
                         <button

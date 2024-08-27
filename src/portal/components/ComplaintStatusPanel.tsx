@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingScreen } from '@/components/Loading/LoadingScreen';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -7,22 +7,25 @@ interface Props {
     siteKey: string;
 }
 
-export const ComplaintStatusPanel = ({ siteKey }: Props) => {
 
+export const ComplaintStatusPanel = ({ siteKey }: Props) => {
     const [complaintId, setComplaintId] = useState('');
     const [passComplaint, setPassComplaint] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [validCaptcha, setValidCaptcha] = useState<any>(null);
 
     const router = useRouter();
-
-    const onChange = () => {
-        console.log('Captcha value:', 'Captcha value');
-    }
+    const captcha = useRef<any>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
 
+        if (!captcha.current.getValue()) {
+            setValidCaptcha(false);
+            return;
+        }
+
+        setIsLoading(true);
         const response = await fetch('https://complaints-channel-backend-48cc8a1e296a.herokuapp.com/complaint/validate', {
             method: 'POST',
             headers: {
@@ -30,7 +33,6 @@ export const ComplaintStatusPanel = ({ siteKey }: Props) => {
             },
             body: JSON.stringify({ id: complaintId, pass: passComplaint }),
         });
-
         setIsLoading(false);
 
         if (response.ok) {
@@ -44,6 +46,7 @@ export const ComplaintStatusPanel = ({ siteKey }: Props) => {
             console.error('Error al validar la denuncia');
         }
     };
+
     return (
         <div>
             {isLoading && <LoadingScreen />}
@@ -64,8 +67,16 @@ export const ComplaintStatusPanel = ({ siteKey }: Props) => {
                 className="w-full p-3 border border-gray-300 rounded-md mb-6"
             />
             <div className='mb-5 flex justify-center'>
-                <ReCAPTCHA sitekey={siteKey} onChange={onChange} />
+                <ReCAPTCHA ref={captcha} sitekey={siteKey}/>
             </div>
+
+            {
+                validCaptcha === false &&
+                (<div className='text-red-600 mb-2 text-center'>
+                    <p>Please accept the captcha</p>
+                </div>)
+            }
+
             <button onClick={handleSubmit} className="w-full bg-cyan-500 text-white py-3 rounded-md">
                 Continuar
             </button>

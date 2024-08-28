@@ -15,12 +15,18 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
     const [selectedComplaint, setSelectedComplaint] = useState<IComplaint | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [filterIdComplaint, setFilterIdComplaint] = useState(''); // Estado para el filtro de idComplaint
     const complaintsPerPage = 5;
+
+    // Filtrar complaints basadas en el idComplaint
+    const filteredComplaints = complaints.filter(complaint =>
+        complaint.idComplaint.includes(filterIdComplaint)
+    );
 
     // Calcular índices para la paginación
     const indexOfLastComplaint = currentPage * complaintsPerPage;
     const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage;
-    const currentComplaints = complaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
+    const currentComplaints = filteredComplaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
 
     const handleOpenModal = (complaint: IComplaint) => {
         setSelectedComplaint(complaint);
@@ -34,6 +40,11 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
 
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
+    };
+
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFilterIdComplaint(e.target.value);
+        setCurrentPage(1); // Reiniciar la paginación cuando cambie el filtro
     };
 
     return (
@@ -59,7 +70,13 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
                     <select className="border rounded px-3 py-2">
                         <option value="2024">2024</option>
                     </select>
-                    <input type="text" placeholder="Filter by month" className="hidden md:block border rounded px-3 py-2" />
+                    <input 
+                        type="text" 
+                        placeholder="Filter by Complaint ID	" 
+                        className="hidden md:block border rounded px-3 py-2"
+                        value={filterIdComplaint}
+                        onChange={handleFilterChange} // Manejar el cambio del filtro
+                    />
                 </div>
             </div>
 
@@ -80,7 +97,7 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
             {/* Pagination */}
             <Pagination
                 complaintsPerPage={complaintsPerPage}
-                totalComplaints={complaints.length}
+                totalComplaints={filteredComplaints.length} // Usar la longitud de los complaints filtrados
                 paginate={handlePageChange}
                 currentPage={currentPage}
             />

@@ -2,54 +2,30 @@
 
 import { useState, useEffect } from 'react'
 import { Bar, Pie } from 'react-chartjs-2'
-import { 
-  Chart as ChartJS, 
-  CategoryScale, 
-  LinearScale, 
-  BarElement, 
-  Title, 
-  Tooltip, 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
   Legend,
   ArcElement
 } from 'chart.js'
-import { parseISO, differenceInDays, format, startOfMonth } from 'date-fns'
+import { parseISO, differenceInDays, format, startOfMonth, subDays, subMonths, subYears, isAfter } from 'date-fns'
+import { IComplaint } from '@/complaints'
 
 ChartJS.register(
-  CategoryScale, 
-  LinearScale, 
-  BarElement, 
+  CategoryScale,
+  LinearScale,
+  BarElement,
   ArcElement,
-  Title, 
-  Tooltip, 
+  Title,
+  Tooltip,
   Legend
 )
 
-interface Metadata {
-  department: string;
-  priority: string;
-}
-
-interface IComplaint {
-  _id: string;
-  fullNameComplainant: string;
-  documentNumber: string;
-  emailComplainant: string;
-  description: string;
-  fullNameDefendant: string;
-  status: string;
-  dateFiled: string;
-  dueDate: string;
-  resolution: string | null;
-  assignedTo: string;
-  metadata: Metadata;
-  isDeleted: boolean;
-  deletedAt: string | null;
-  idComplaint: string;
-  passComplaint: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
+type Period = 'today' | 'week' | 'month' | '3months' | '6months' | '9months' | 'year' | 'all';
 
 // Custom Card components
 const Card = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
@@ -80,13 +56,16 @@ async function fetchComplaints(): Promise<IComplaint[]> {
 
 export default function DashboardComponent() {
   const [complaints, setComplaints] = useState<IComplaint[]>([])
+  const [filteredComplaints, setFilteredComplaints] = useState<IComplaint[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [period, setPeriod] = useState<Period>('all')
 
   useEffect(() => {
     fetchComplaints()
       .then(data => {
         setComplaints(data)
+        setFilteredComplaints(data)
         setIsLoading(false)
       })
       .catch(err => {
@@ -94,6 +73,47 @@ export default function DashboardComponent() {
         setIsLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    filterComplaintsByPeriod(period)
+  }, [period, complaints])
+
+  const filterComplaintsByPeriod = (selectedPeriod: Period) => {
+    const now = new Date()
+    let startDate: Date
+
+    switch (selectedPeriod) {
+      case 'today':
+        startDate = startOfMonth(now)
+        break
+      case 'week':
+        startDate = subDays(now, 7)
+        break
+      case 'month':
+        startDate = subMonths(now, 1)
+        break
+      case '3months':
+        startDate = subMonths(now, 3)
+        break
+      case '6months':
+        startDate = subMonths(now, 6)
+        break
+      case '9months':
+        startDate = subMonths(now, 9)
+        break
+      case 'year':
+        startDate = subYears(now, 1)
+        break
+      default:
+        setFilteredComplaints(complaints)
+        return
+    }
+
+    const filtered = complaints.filter(complaint =>
+      isAfter(parseISO(complaint.dateFiled), startDate)
+    )
+    setFilteredComplaints(filtered)
+  }
 
   const groupComplaintsByMonth = (complaints: IComplaint[]) => {
     const groupedComplaints: { [key: string]: number } = {}
@@ -117,7 +137,7 @@ export default function DashboardComponent() {
     return totalDays / resolvedComplaints.length
   }
 
-  const complaintsByMonth = groupComplaintsByMonth(complaints)
+  const complaintsByMonth = groupComplaintsByMonth(filteredComplaints)
   const monthLabels = Object.keys(complaintsByMonth).sort()
   const monthData = monthLabels.map(month => complaintsByMonth[month])
 
@@ -132,7 +152,7 @@ export default function DashboardComponent() {
     ],
   }
 
-  const averageResolutionTime = calculateAverageResolutionTime(complaints)
+  const averageResolutionTime = calculateAverageResolutionTime(filteredComplaints)
 
   const resolutionTimeData = {
     labels: ['Tiempo promedio de resolución'],
@@ -145,7 +165,7 @@ export default function DashboardComponent() {
     ],
   }
 
-  const statusCounts = complaints.reduce((acc, complaint) => {
+  const statusCounts = filteredComplaints.reduce((acc, complaint) => {
     acc[complaint.status] = (acc[complaint.status] || 0) + 1
     return acc
   }, {} as Record<string, number>)
@@ -176,6 +196,26 @@ export default function DashboardComponent() {
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard de Denuncias</h1>
+      <div className="mb-6">
+        <label htmlFor="period-select" className="block text-sm font-medium text-gray-700 mb-2">
+          Seleccionar período:
+        </label>
+        <select
+          id="period-select"
+          value={period}
+          onChange={(e) => setPeriod(e.target.value as Period)}
+          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          <option value="all">Todo</option>
+          <option value="today">Hoy</option>
+          <option value="week">Última semana</option>
+          <option value="month">Último mes</option>
+          <option value="3months">Últimos 3 meses</option>
+          <option value="6months">Últimos 6 meses</option>
+          <option value="9months">Últimos 9 meses</option>
+          <option value="year">Último año</option>
+        </select>
+      </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="col-span-2">
           <CardHeader>
@@ -209,15 +249,15 @@ export default function DashboardComponent() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <div className="bg-gray-50 p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold text-gray-600">Total de denuncias</h3>
-                <p className="text-3xl font-bold text-blue-600">{complaints.length}</p>
+                <p className="text-3xl font-bold text-teal-600">{filteredComplaints.length}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold text-gray-600">Denuncias abiertas</h3>
-                <p className="text-3xl font-bold text-yellow-600">{complaints.filter(c => c.status === 'open').length}</p>
+                <p className="text-3xl font-bold text-pink-400">{filteredComplaints.filter(c => c.status === 'open').length}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold text-gray-600">Tiempo promedio de resolución</h3>
-                <p className="text-3xl font-bold text-green-600">{averageResolutionTime.toFixed(1)} días</p>
+                <p className="text-3xl font-bold text-teal-600">{averageResolutionTime.toFixed(1)} días</p>
               </div>
             </div>
           </CardContent>

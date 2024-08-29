@@ -11,16 +11,28 @@ interface Props {
 }
 
 export const ComplaintMain = ({ complaintList = [] }: Props) => {
-    const [complaints] = useState<IComplaint[]>(complaintList);
+    // Estados para cada filtro
+    const [complaints, setComplaints] = useState<IComplaint[]>(complaintList);
     const [selectedComplaint, setSelectedComplaint] = useState<IComplaint | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [filterIdComplaint, setFilterIdComplaint] = useState('');
+    const [filterFullNameComplainant, setFilterFullNameComplainant] = useState('');
+    const [filterStatus, setFilterStatus] = useState('');
+    const [filterAssignedTo, setFilterAssignedTo] = useState('');
     const complaintsPerPage = 5;
+
+    // Función de filtrado
+    const filteredComplaints = complaints
+        .filter(complaint => complaint.idComplaint.includes(filterIdComplaint))
+        .filter(complaint => complaint.fullNameComplainant.toLowerCase().includes(filterFullNameComplainant.toLowerCase()))
+        .filter(complaint => complaint.status.includes(filterStatus));
 
     // Calcular índices para la paginación
     const indexOfLastComplaint = currentPage * complaintsPerPage;
     const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage;
-    const currentComplaints = complaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
+    const currentComplaints = filteredComplaints.slice(indexOfFirstComplaint, indexOfLastComplaint);
 
     const handleOpenModal = (complaint: IComplaint) => {
         setSelectedComplaint(complaint);
@@ -36,6 +48,27 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
         setCurrentPage(pageNumber);
     };
 
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>, filterSetter: React.Dispatch<React.SetStateAction<string>>) => {
+        filterSetter(e.target.value);
+        setCurrentPage(1); // Reiniciar la paginación cuando cambie el filtro
+    };
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, filterSetter: React.Dispatch<React.SetStateAction<string>>) => {
+        filterSetter(e.target.value);
+        setCurrentPage(1); // Reiniciar la paginación cuando cambie el filtro
+    };
+
+    // Función para actualizar el estado de una queja específica
+    const updateComplaintStatus = (idComplaint: string, newStatus: string) => {
+        setComplaints(prevComplaints =>
+            prevComplaints.map(complaint =>
+                complaint.idComplaint === idComplaint
+                    ? { ...complaint, status: newStatus }
+                    : complaint
+            )
+        );
+    };
+
     return (
         <div className="p-8 bg-white m-8 rounded-lg shadow-md">
             {/* Breadcrumb */}
@@ -48,18 +81,41 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
             <h1 className="text-2xl font-semibold mb-4">Complaints</h1>
 
             {/* Filters */}
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex space-x-4">
-                    <button className="flex items-center space-x-1 text-cyan-600">
-                        <span className="text-lg font-medium">Filters</span>
-                    </button>
-                    <button className="text-cyan-600 font-medium">Add Filter</button>
+            <div className="flex flex-col md:flex-row justify-between items-center mb-4 space-y-4 md:space-y-0 md:space-x-4">
+                <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+                    <input
+                        type="text"
+                        placeholder="Filter by id Complaint"
+                        className="border rounded px-3 py-2"
+                        value={filterIdComplaint}
+                        onChange={(e) => handleFilterChange(e, setFilterIdComplaint)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Filter by Complainant Name"
+                        className="border rounded px-3 py-2"
+                        value={filterFullNameComplainant}
+                        onChange={(e) => handleFilterChange(e, setFilterFullNameComplainant)}
+                    />
                 </div>
-                <div className="flex space-x-4">
-                    <select className="border rounded px-3 py-2">
-                        <option value="2024">2024</option>
+                <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+                    <select
+                        className="border rounded px-3 py-2"
+                        value={filterStatus}
+                        onChange={(e) => handleSelectChange(e, setFilterStatus)}
+                    >
+                        <option value="">All Status</option>
+                        <option value="open">Open</option>
+                        <option value="closed">Closed</option>
+                        <option value="pending">Pending</option>
                     </select>
-                    <input type="text" placeholder="Filter by month" className="hidden md:block border rounded px-3 py-2" />
+                    <input
+                        type="text"
+                        placeholder="Filter by Assigned To"
+                        className="border rounded px-3 py-2"
+                        value={filterAssignedTo}
+                        onChange={(e) => handleFilterChange(e, setFilterAssignedTo)}
+                    />
                 </div>
             </div>
 
@@ -80,7 +136,7 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
             {/* Pagination */}
             <Pagination
                 complaintsPerPage={complaintsPerPage}
-                totalComplaints={complaints.length}
+                totalComplaints={filteredComplaints.length}
                 paginate={handlePageChange}
                 currentPage={currentPage}
             />
@@ -91,6 +147,7 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
                     complaint={selectedComplaint}
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
+                    updateComplaintStatus={updateComplaintStatus}  // Pasamos la función al modal
                 />
             )}
         </div>

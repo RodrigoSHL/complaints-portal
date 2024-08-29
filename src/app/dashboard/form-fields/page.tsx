@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
-interface FormFields {
+export interface FormFields {
     name: string;
     label: string;
     type: string;

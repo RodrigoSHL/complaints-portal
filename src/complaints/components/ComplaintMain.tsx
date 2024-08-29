@@ -12,7 +12,7 @@ interface Props {
 
 export const ComplaintMain = ({ complaintList = [] }: Props) => {
     // Estados para cada filtro
-    const [complaints] = useState<IComplaint[]>(complaintList);
+    const [complaints, setComplaints] = useState<IComplaint[]>(complaintList);
     const [selectedComplaint, setSelectedComplaint] = useState<IComplaint | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -58,6 +58,17 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
         setCurrentPage(1); // Reiniciar la paginación cuando cambie el filtro
     };
 
+    // Función para actualizar el estado de una queja específica
+    const updateComplaintStatus = (idComplaint: string, newStatus: string) => {
+        setComplaints(prevComplaints =>
+            prevComplaints.map(complaint =>
+                complaint.idComplaint === idComplaint
+                    ? { ...complaint, status: newStatus }
+                    : complaint
+            )
+        );
+    };
+
     return (
         <div className="p-8 bg-white m-8 rounded-lg shadow-md">
             {/* Breadcrumb */}
@@ -72,23 +83,23 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
             {/* Filters */}
             <div className="flex flex-col md:flex-row justify-between items-center mb-4 space-y-4 md:space-y-0 md:space-x-4">
                 <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
-                    <input 
-                        type="text" 
-                        placeholder="Filter by id Complaint" 
+                    <input
+                        type="text"
+                        placeholder="Filter by id Complaint"
                         className="border rounded px-3 py-2"
                         value={filterIdComplaint}
                         onChange={(e) => handleFilterChange(e, setFilterIdComplaint)}
                     />
-                    <input 
-                        type="text" 
-                        placeholder="Filter by Complainant Name" 
+                    <input
+                        type="text"
+                        placeholder="Filter by Complainant Name"
                         className="border rounded px-3 py-2"
                         value={filterFullNameComplainant}
                         onChange={(e) => handleFilterChange(e, setFilterFullNameComplainant)}
                     />
                 </div>
                 <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
-                    <select 
+                    <select
                         className="border rounded px-3 py-2"
                         value={filterStatus}
                         onChange={(e) => handleSelectChange(e, setFilterStatus)}
@@ -98,9 +109,9 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
                         <option value="closed">Closed</option>
                         <option value="pending">Pending</option>
                     </select>
-                    <input 
-                        type="text" 
-                        placeholder="Filter by Assigned To" 
+                    <input
+                        type="text"
+                        placeholder="Filter by Assigned To"
                         className="border rounded px-3 py-2"
                         value={filterAssignedTo}
                         onChange={(e) => handleFilterChange(e, setFilterAssignedTo)}
@@ -136,6 +147,7 @@ export const ComplaintMain = ({ complaintList = [] }: Props) => {
                     complaint={selectedComplaint}
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
+                    updateComplaintStatus={updateComplaintStatus}  // Pasamos la función al modal
                 />
             )}
         </div>
